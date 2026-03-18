@@ -1,7 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+// Удаляем builder.Services.AddRazorPages(); - эта строка вызывает ошибки
+builder.Services.AddControllers();
 builder.Services.AddMvc(option => option.EnableEndpointRouting = true);
 builder.Services.AddSwaggerGen(option => {
     option.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -9,7 +10,7 @@ builder.Services.AddSwaggerGen(option => {
         Version = "v1",
         Title = "Пробная версия"
     });
-    string PathFile = Path.Combine(System.AppContext.BaseDirectory, "WebApplication2.xml");
+    string PathFile = Path.Combine(System.AppContext.BaseDirectory, "API_belosludtseva.xml");
     option.IncludeXmlComments(PathFile);
 });
 
@@ -25,6 +26,5 @@ app.UseEndpoints(endpoints =>
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Проба версия");
-
 });
 app.Run();
