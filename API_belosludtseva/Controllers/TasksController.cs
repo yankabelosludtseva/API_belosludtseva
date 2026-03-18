@@ -11,8 +11,8 @@ namespace API_belosludtseva.Controllers
     /// Контроллер для работы с задачами
     /// </summary>
     [Route("api/TasksController")]
-    [ApiExplorerSettings(GroupName ="v1")] // Версия документа
-    public class TasksController : Controller // Используйте ControllerBase
+    [ApiExplorerSettings(GroupName = "v1")] // Версия документа
+    public class TasksController : Controller
     {
         private readonly TaskContext _context;
 
@@ -28,31 +28,31 @@ namespace API_belosludtseva.Controllers
         /// <remarks>Данный метод получает список задач, находящийся в базе данных</remarks>
         /// <response code="200">Список успешно получен</response>
         /// <response code="500">При выполнении запроса возникли ошибки</response>
-        [HttpGet("list")]
+        [HttpGet("List")]
         public IActionResult List()
         {
             try
             {
                 // получаем список задач из базы данных
                 var tasks = _context.Tasks.ToList();
-                return Ok(tasks); // Используйте Ok() вместо Json()
+                return Ok(tasks);
             }
             catch (Exception)
             {
-                return StatusCode(500); // если возникли неполадки, выдаём 500 ошибку (ошибку сервера)
+                return StatusCode(500);
             }
         }
 
         /// <summary>
-        /// Получение задачи по ID (альтернативный маршрут)
+        /// Получение задачи по ID
         /// </summary>
-        /// <remarks>Данный метод получает задачу по ID из маршрута</remarks>
+        /// <remarks>Данный метод получает задачу по ID</remarks>
         /// <param name="id">Идентификатор задачи</param>
         /// <response code="200">Задача успешно получена</response>
         /// <response code="404">Задача не найдена</response>
         /// <response code="500">При выполнении запроса возникли ошибки</response>
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        [HttpGet("Item")]
+        public IActionResult GetById([FromQuery] int id)
         {
             try
             {
@@ -70,15 +70,15 @@ namespace API_belosludtseva.Controllers
         }
 
         /// <summary>
-        /// Получение задачи по ID (через параметр)
+        /// Получение задачи по ID (альтернативный маршрут)
         /// </summary>
-        /// <remarks>Данный метод получает задачу, находящуюся в базе данных</remarks>
+        /// <remarks>Данный метод получает задачу по ID из маршрута</remarks>
         /// <param name="id">Идентификатор задачи</param>
         /// <response code="200">Задача успешно получена</response>
         /// <response code="404">Задача не найдена</response>
         /// <response code="500">При выполнении запроса возникли ошибки</response>
-        [HttpGet("item")]
-        public IActionResult Item(int id) // Измените параметр на id с маленькой буквы
+        [HttpGet("{id}")]
+        public IActionResult GetByIdFromRoute(int id)
         {
             try
             {
