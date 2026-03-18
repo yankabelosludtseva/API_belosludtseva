@@ -1,26 +1,38 @@
 ﻿namespace API_belosludtseva.Model
 {
-    public class Task
+    /// <summary>
+    /// Класс, представляющий задачу
+    /// </summary>
+    public class Tasks
     {
         /// <summary>
-        /// Задачи
+        /// Код
         /// </summary>
-        public class Tasks
-        {
-            /// <summary>
-            /// Код
-            /// </summary>
-            public int Id { get; set; }
-            /// <summary> Наименование
-            public string Name { get; set; }
-            /// <summary> Приоритет
-            public string Priority { get; set; }
-            /// <summary> Дата выполнения
-            public DateTime DateTimeExecute { get; set; }
-            /// <summary> Комментарий
-            public string Comment { get; set; }
-            /// <summary> Выполнено
-            public bool Done { get; set; }
-        }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Наименование
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Приоритет
+        /// </summary>
+        public string Priority { get; set; }
+
+        /// <summary>
+        /// Дата выполнения
+        /// </summary>
+        public DateTime DateTimeExecute { get; set; }
+
+        /// <summary>
+        /// Комментарий
+        /// </summary>
+        public string Comment { get; set; }
+
+        /// <summary>
+        /// Выполнено
+        /// </summary>
+        public bool Done { get; set; }
     }
 }
