@@ -13,12 +13,12 @@
         /// <summary>
         /// Наименование
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         /// Приоритет
         /// </summary>
-        public string Priority { get; set; }
+        public string Priority { get; set; } = string.Empty;
 
         /// <summary>
         /// Дата выполнения
@@ -28,7 +28,7 @@
         /// <summary>
         /// Комментарий
         /// </summary>
-        public string Comment { get; set; }
+        public string Comment { get; set; } = string.Empty;
 
         /// <summary>
         /// Выполнено

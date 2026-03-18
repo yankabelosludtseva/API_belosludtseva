@@ -1,17 +1,34 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Удаляем builder.Services.AddRazorPages(); - эта строка вызывает ошибки
 builder.Services.AddControllers();
-builder.Services.AddMvc(option => option.EnableEndpointRouting = true);
+builder.Services.AddEndpointsApiExplorer();
+
+// Добавляем Swagger только ОДИН раз с двумя версиями
 builder.Services.AddSwaggerGen(option => {
+    // Версия v1
     option.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
     {
         Version = "v1",
-        Title = "Пробная версия"
+        Title = "Руководство для использования запросов",
+        Description = "Полное руководство для использования GET запросов"
     });
-    string PathFile = Path.Combine(System.AppContext.BaseDirectory, "API_belosludtseva.xml");
-    option.IncludeXmlComments(PathFile);
+
+    // Версия v2
+    option.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v2",
+        Title = "Руководство для использования запросов",
+        Description = "Полное руководство для использования POST запросов"
+    });
+
+    // Добавляем XML комментарии (с проверкой существования файла)
+    var xmlFile = "API_belosludtseva.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        option.IncludeXmlComments(xmlPath);
+    }
 });
 
 var app = builder.Build();
@@ -23,8 +40,13 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+// Настраиваем Swagger UI
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Проба версия");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Запросы GET");
+    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Запросы POST");
+    c.RoutePrefix = "swagger"; // Это сделает swagger доступным по корневому пути
 });
+
 app.Run();

@@ -9,15 +9,15 @@ namespace API_belosludtseva.Context
         /// <summary>
         /// Данные из базы данных
         /// </summary>
-        public DbSet<Tasks> Tasks { get; set; } = null!;
+        public DbSet<Tasks> Tasks { get; set; }
 
         /// <summary>
         /// Конструктор контекста
         /// </summary>
         public TaskContext()
         {
-            Database.EnsureCreated(); // Проверяем создано ли подключение
-            Tasks.Load(); // Выполняем загрузку данных
+            // Проверяем создана ли база данных
+            Database.EnsureCreated();
         }
 
         /// <summary>
@@ -27,11 +27,13 @@ namespace API_belosludtseva.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // подключаемся к серверу MySQL, со следующими настройками
-            optionsBuilder.UseMySql("server=127.0.0.1;" +
-            "uid=root;" +
-            "pwd=" +
-            "database=TaskManager",
-            new MySqlServerVersion(new Version(8, 0, 11)));
+            var connectionString = "server=127.0.0.1;" +
+                                  "uid=root;" +
+                                  "pwd=;" + // Укажите пароль если есть
+                                  "database=TaskManager";
+
+            optionsBuilder.UseMySql(connectionString,
+                new MySqlServerVersion(new Version(8, 0, 11)));
         }
     }
 }

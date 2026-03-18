@@ -11,22 +11,31 @@ namespace API_belosludtseva.Controllers
     /// Контроллер для работы с задачами
     /// </summary>
     [Route("api/[controller]")]
-    public class TasksController : Controller
+    [ApiController] // Добавьте этот атрибут
+    public class TasksController : ControllerBase // Используйте ControllerBase
     {
+        private readonly TaskContext _context;
+
+        // Добавьте конструктор для создания контекста один раз
+        public TasksController()
+        {
+            _context = new TaskContext();
+        }
+
         /// <summary>
         /// Получение списка задач
         /// </summary>
         /// <remarks>Данный метод получает список задач, находящийся в базе данных</remarks>
         /// <response code="200">Список успешно получен</response>
         /// <response code="500">При выполнении запроса возникли ошибки</response>
-        [Route("list")]
+        [HttpGet("list")]
         public IActionResult List()
         {
             try
             {
                 // получаем список задач из базы данных
-                IEnumerable<Tasks> tasks = new TaskContext().Tasks.ToList();
-                return Json(tasks); // возвращаем ответ в виде JSON
+                var tasks = _context.Tasks.ToList();
+                return Ok(tasks); // Используйте Ok() вместо Json()
             }
             catch (Exception)
             {
@@ -48,41 +57,41 @@ namespace API_belosludtseva.Controllers
             try
             {
                 // Получаем задачу по коду
-                Tasks? task = new TaskContext().Tasks.Where(x => x.Id == id).FirstOrDefault();
+                var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
                 if (task == null)
                     return NotFound();
 
-                return Json(task); // возвращаем ответ в виде Json
+                return Ok(task);
             }
             catch (Exception)
             {
-                return StatusCode(500); // если возникли неполадки, выдаём 500 ошибку (ошибку сервера)
+                return StatusCode(500);
             }
         }
 
         /// <summary>
-        /// Получение задачи
+        /// Получение задачи по ID (через параметр)
         /// </summary>
         /// <remarks>Данный метод получает задачу, находящуюся в базе данных</remarks>
-        /// <param name="Id">Идентификатор задачи</param>
+        /// <param name="id">Идентификатор задачи</param>
         /// <response code="200">Задача успешно получена</response>
         /// <response code="404">Задача не найдена</response>
         /// <response code="500">При выполнении запроса возникли ошибки</response>
-        [Route("item")]
-        public IActionResult Item(int Id)
+        [HttpGet("item")]
+        public IActionResult Item(int id) // Измените параметр на id с маленькой буквы
         {
             try
             {
                 // Получаем задачу по коду
-                Tasks? task = new TaskContext().Tasks.Where(x => x.Id == Id).FirstOrDefault();
+                var task = _context.Tasks.FirstOrDefault(x => x.Id == id);
                 if (task == null)
                     return NotFound();
 
-                return Json(task); // возвращаем ответ в виде Json
+                return Ok(task);
             }
             catch (Exception)
             {
-                return StatusCode(500); // если возникли неполадки, выдаём 500 ошибку (ошибку сервера)
+                return StatusCode(500);
             }
         }
 
@@ -99,15 +108,15 @@ namespace API_belosludtseva.Controllers
             try
             {
                 // Выполняем поиск задач по наименованию
-                IEnumerable<Tasks> tasks = new TaskContext().Tasks
+                var tasks = _context.Tasks
                     .Where(x => x.Name.Contains(search))
                     .ToList();
 
-                return Json(tasks); // возвращаем ответ в виде JSON
+                return Ok(tasks);
             }
             catch (Exception)
             {
-                return StatusCode(500); // если возникли неполадки, выдаём 500 ошибку (ошибку сервера)
+                return StatusCode(500);
             }
         }
     }
