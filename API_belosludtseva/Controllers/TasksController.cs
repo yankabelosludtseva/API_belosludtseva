@@ -10,9 +10,9 @@ namespace API_belosludtseva.Controllers
     /// <summary>
     /// Контроллер для работы с задачами
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiController] // Добавьте этот атрибут
-    public class TasksController : ControllerBase // Используйте ControllerBase
+    [Route("api/TasksController")]
+    [ApiExplorerSettings(GroupName ="v1")] // Версия документа
+    public class TasksController : Controller // Используйте ControllerBase
     {
         private readonly TaskContext _context;
 
