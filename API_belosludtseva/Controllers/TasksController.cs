@@ -146,5 +146,75 @@ namespace API_belosludtseva.Controllers
                 return StatusCode(500);
             }
         }
+
+        /// <summary>
+        /// Метод полного обновления задачи
+        /// </summary>
+        /// <param name="id">Идентификатор задачи</param>
+        /// <param name="updatedTask">Обновленные данные задачи</param>
+        /// <returns>Статус выполнения запроса</returns>
+        /// <remarks>Данный метод полностью заменяет данные задачи в базе данных</remarks>
+        [HttpPut]
+        [Route("Update/{id}")]
+        [ApiExplorerSettings(GroupName = "v3")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public ActionResult UpdateTask(int id, [FromBody] Tasks updatedTask)
+        {
+            try
+            {
+                // Проверка на null
+                if (updatedTask == null)
+                {
+                    return BadRequest("Данные задачи не могут быть пустыми");
+                }
+
+                // Проверка совпадения ID
+                if (id != updatedTask.Id)
+                {
+                    return BadRequest("ID в URL не совпадает с ID задачи");
+                }
+
+                // Дополнительная валидация
+                if (string.IsNullOrWhiteSpace(updatedTask.Name))
+                {
+                    return BadRequest("Название задачи не может быть пустым");
+                }
+
+                using (TaskContext tasksContext = new TaskContext())
+                {
+                    var existingTask = tasksContext.Tasks.Find(id);
+
+                    if (existingTask == null)
+                    {
+                        return NotFound($"Задача с ID {id} не найдена");
+                    }
+
+                    existingTask.Name = updatedTask.Name;
+                    existingTask.Comment = updatedTask.Comment;
+                    existingTask.Priority = updatedTask.Priority;
+                    existingTask.DateTimeExecute = updatedTask.DateTimeExecute;
+                    existingTask.Done = updatedTask.Done;
+
+                    tasksContext.SaveChanges();
+
+                    return Ok(new
+                    {
+                        message = "Задача успешно обновлена",
+                        task = existingTask
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Внутренняя ошибка сервера",
+                    details = ex.Message
+                });
+            }
+        }
     }
 }
