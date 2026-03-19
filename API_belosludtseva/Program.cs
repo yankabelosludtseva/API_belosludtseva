@@ -22,6 +22,14 @@ builder.Services.AddSwaggerGen(option => {
         Description = "Полное руководство для использования POST запросов"
     });
 
+    // Версия v3
+    option.SwaggerDoc("v3", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v3",
+        Title = "Руководство для использования запросов",
+        Description = "Полное руководство для использования PUT запросов"
+    });
+
     // Добавляем XML комментарии (с проверкой существования файла)
     var xmlFile = "API_belosludtseva.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -46,6 +54,7 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Запросы GET");
     c.SwaggerEndpoint("/swagger/v2/swagger.json", "Запросы POST");
+    c.SwaggerEndpoint("/swagger/v3/swagger.json", "Запросы PUT");
     c.RoutePrefix = "swagger"; // Это сделает swagger доступным по корневому пути
 });
 
